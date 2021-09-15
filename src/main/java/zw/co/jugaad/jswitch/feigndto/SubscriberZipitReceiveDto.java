@@ -8,17 +8,17 @@ import java.math.BigDecimal;
 @Data
 @Builder
 public class SubscriberZipitReceiveDto {
+
     private String subscriberMobile;
 
-    private String bank;
-
-    private String bankCode;
+    private String bin;
 
     private String bankAccount;
 
     private BigDecimal amount;
 
-    private String pin;
-
     private Channel channel;
+
+    private String rrn;
+
 }

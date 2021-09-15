@@ -4,19 +4,22 @@ import lombok.SneakyThrows;
 import org.jpos.iso.*;
 import org.jpos.q2.iso.QMUX;
 import org.jpos.util.NameRegistrar;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import zw.co.jugaad.jswitch.feignclient.ZipitFeignClient;
+import zw.co.jugaad.jswitch.feigndto.Channel;
 import zw.co.jugaad.jswitch.feigndto.SubscriberZipitReceiveDto;
 import zw.co.jugaad.jswitch.feigndto.TransactionResponse;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 
 public class ZipitRequestLister implements ISORequestListener {
 
-    private final ZipitFeignClient zipitFeignClient;
+    @Autowired
+    private  ZipitFeignClient zipitFeignClient;
 
-    public ZipitRequestLister(ZipitFeignClient zipitFeignClient) {
-        this.zipitFeignClient = zipitFeignClient;
-    }
+
 
     @SneakyThrows
     @Override
@@ -48,13 +51,19 @@ public class ZipitRequestLister implements ISORequestListener {
                     try {
                         MUX mux = QMUX.getMUX("server_1_mux");
                         SubscriberZipitReceiveDto subscriberZipitReceiveDto = SubscriberZipitReceiveDto.builder()
-                                .subscriberMobile(isoMsg.get)
-                        TransactionResponse transactionResponse = zipitFeignClient.zipitReceive();
+                                .subscriberMobile(isoMsg.getString(13))
+                                .amount(new BigDecimal(isoMsg.getString(4)))
+                                .bankAccount(isoMsg.getString(103))
+                                .bin(isoMsg.getString(102))
+                                .rrn(isoMsg.getString(37))
+                                .build();
+
+                        ResponseEntity<TransactionResponse> transactionResponse = zipitFeignClient.zipitReceive(subscriberZipitReceiveDto);
                         ISOMsg responseMsg;
-                        if (isoMsg.getString(4).equalsIgnoreCase("000000009999"))
-                            responseMsg = createZipitSuccessfulResponse();
+                        if (transactionResponse.getBody().getStatus().name().equalsIgnoreCase("COMPLETE"))
+                            responseMsg = createZipitSuccessfulResponse(isoMsg);
                         else {
-                            responseMsg = createZipitFailureResponse();
+                            responseMsg = createZipitFailureResponse(isoMsg);
                         }
                         if (responseMsg != null) {
                             isoSource.send(responseMsg);
@@ -66,11 +75,14 @@ public class ZipitRequestLister implements ISORequestListener {
                 }
 
                 default:
-                    throw new Exception("Invalid message");
+                    ISOMsg isoMsg = new ISOMsg();
+                    isoMsg.setMTI("0810");
+                    isoSource.send(isoMsg);
+                    //throw new Exception("Invalid message");
             }
         }
 
-        private ISOMsg createZipitSuccessfulResponse() throws ISOException {
+        private ISOMsg createZipitSuccessfulResponse(ISOMsg requestIsoMsg) throws ISOException {
 
             ISOMsg isoMsg = new ISOMsg();
             isoMsg.setMTI("0210");
@@ -101,7 +113,7 @@ public class ZipitRequestLister implements ISORequestListener {
             return isoMsg;
         }
 
-        private ISOMsg createZipitFailureResponse() throws ISOException {
+        private ISOMsg createZipitFailureResponse(ISOMsg requestIsoMsg) throws ISOException {
 
             ISOMsg isoMsg = new ISOMsg();
             isoMsg.setMTI("0210");
