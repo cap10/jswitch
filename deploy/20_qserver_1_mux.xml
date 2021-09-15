@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<mux class="org.jpos.q2.iso.QMUX" logger="Q2" name="server_1_mux">
+    <in>Server_1_NETWORK_OUT</in>
+    <out>Server_1_NETWORK_IN</out>
+    <unhandled>unhandled</unhandled>
+</mux>
