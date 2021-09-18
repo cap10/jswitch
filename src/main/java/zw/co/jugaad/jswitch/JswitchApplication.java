@@ -1,6 +1,8 @@
 package zw.co.jugaad.jswitch;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import feign.RequestInterceptor;
+import feign.RequestTemplate;
 import lombok.extern.slf4j.Slf4j;
 import org.jpos.iso.ISOMsg;
 import org.jpos.iso.ISOUtil;
@@ -10,12 +12,15 @@ import org.jpos.util.SimpleLogListener;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import zw.co.jugaad.jswitch.field127.Field127;
 
+import javax.annotation.PostConstruct;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.StringReader;
+import java.util.TimeZone;
 
 @SpringBootApplication
 @Slf4j
@@ -97,6 +102,29 @@ public class JswitchApplication implements CommandLineRunner {
 
         }*/
 
+    }
+
+    @Bean
+    AuthInterceptor authFeign() {
+        return new AuthInterceptor();
+    }
+
+
+
+    class AuthInterceptor implements RequestInterceptor {
+
+        @Override
+        public void apply(RequestTemplate template) {
+            template.header("x-api-key", "$apr1$0xpiuy83$80wyJVeTrN/UhcZuPA7pX.");
+
+        }
+
+    }
+
+    @PostConstruct
+    public void init(){
+        // Setting Spring Boot SetTimeZone
+        TimeZone.setDefault(TimeZone.getTimeZone("CAT"));
     }
 }
 
