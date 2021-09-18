@@ -8,7 +8,7 @@ import zw.co.jugaad.jswitch.feigndto.SubscriberZipitReceiveDto;
 import zw.co.jugaad.jswitch.feigndto.TransactionResponse;
 
 
-@FeignClient(name = "akupay-api-gateway"/*,url = "https://api.cashmet.co.zw"*/)
+@FeignClient(name = "akupay-api-gateway",url = "https://api-metbank.jugaad.co.zw")
 public interface ZipitFeignClient {
 
     @PostMapping("/zipit-receive")

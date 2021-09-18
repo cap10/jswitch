@@ -3,8 +3,9 @@
     <attr name ="port" type="java.lang.Integer">10000</attr>
     <attr name ="maxSessions" type="java.lang.Integer">100</attr>
 
-    <channel class ="org.jpos.iso.channel.XMLChannel" logger ="Q2" packager="org.jpos.iso.packager.XMLPackager" header="6000000000">
-
+    <channel class ="org.jpos.iso.channel.NACChannel" logger ="Q2"
+             packager="org.jpos.iso.packager.GenericPackager" >
+<property name = "packager-config" value="cfg/packager/postpack.xml"/>
     </channel>
 <request-listener class ="zw.co.jugaad.jswitch.iso.ZipitRequestLister" logger="Q2"></request-listener>
     <in>Server_1_NETWORK_IN</in>

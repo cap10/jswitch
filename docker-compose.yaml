@@ -1,0 +1,12 @@
+version: '3'
+services:
+
+  cashmet-postillion-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: cap10/myrepository:metbank-cashmet-postillion-service
+    container_name: cashmet-postillion-service
+    restart: unless-stopped
+    network_mode: host
+
