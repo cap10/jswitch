@@ -1,5 +1,7 @@
 package zw.co.jugaad.jswitch.iso;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import feign.FeignException;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jpos.iso.ISOException;
@@ -12,6 +14,7 @@ import org.jpos.util.SimpleLogListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import zw.co.jugaad.jswitch.feignclient.ZipitFeignClient;
+import zw.co.jugaad.jswitch.feigndto.ResponseMessage;
 import zw.co.jugaad.jswitch.feigndto.SubscriberZipitReceiveDto;
 import zw.co.jugaad.jswitch.feigndto.TransactionResponse;
 
@@ -19,7 +22,7 @@ import java.math.BigDecimal;
 
 @Slf4j
 public class ZipitRequestLister implements ISORequestListener {
-
+    private ObjectMapper objectMapper = new ObjectMapper();
     @Autowired
     private ZipitFeignClient zipitFeignClient;
 
@@ -108,7 +111,7 @@ public class ZipitRequestLister implements ISORequestListener {
 
         }
 
-        private TransactionResponse performZipitReceive(String mobile, String amount, String sourceAccount, String bin, String rrn) {
+        private TransactionResponse performZipitReceive(String mobile, String amount, String sourceAccount, String bin, String rrn) throws Exception {
             SubscriberZipitReceiveDto subscriberZipitReceiveDto = SubscriberZipitReceiveDto.builder()
                     .subscriberMobile(mobile)
                     .amount(getAmountInDollars(amount))
@@ -119,8 +122,10 @@ public class ZipitRequestLister implements ISORequestListener {
             try {
                 ResponseEntity<TransactionResponse> transactionResponse = zipitFeignClient.zipitReceive(subscriberZipitReceiveDto);
                 return transactionResponse.getBody();
-            } catch (Exception exception) {
-                log.info("######################### Exception occurrec: {}", exception.getMessage() + exception.getStackTrace());
+            } catch (FeignException exception) {
+                var message = objectMapper.readValue(exception.contentUTF8(), ResponseMessage.class);
+                log.info("######################{}", exception.contentUTF8());
+                log.info("######################### Exception occurred: {}", message.getMessage());
                 throw new RuntimeException("Transaction failed");
             }
         }
