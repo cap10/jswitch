@@ -122,10 +122,14 @@ public class ZipitRequestLister implements ISORequestListener {
             try {
                 ResponseEntity<TransactionResponse> transactionResponse = zipitFeignClient.zipitReceive(subscriberZipitReceiveDto);
                 return transactionResponse.getBody();
-            } catch (FeignException exception) {
-                var message = objectMapper.readValue(exception.contentUTF8(), ResponseMessage.class);
-                log.info("######################{}", exception.contentUTF8());
-                log.info("######################### Exception occurred: {}", message.getMessage());
+            } catch (Exception exception) {
+                if (exception instanceof FeignException) {
+                    FeignException feignException = (FeignException)exception;
+                    var message = objectMapper.readValue(feignException.contentUTF8(), ResponseMessage.class);
+                    log.info("######################{}", feignException.contentUTF8());
+                    log.info("######################### Exception occurred: {}", message.getMessage());
+                }
+                exception.printStackTrace();
                 throw new RuntimeException("Transaction failed");
             }
         }
