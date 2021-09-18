@@ -23,8 +23,8 @@ import java.math.BigDecimal;
 @Slf4j
 public class ZipitRequestLister implements ISORequestListener {
     private ObjectMapper objectMapper = new ObjectMapper();
-    @Autowired
-    private ZipitFeignClient zipitFeignClient;
+
+
 
 
     @SneakyThrows
@@ -37,6 +37,8 @@ public class ZipitRequestLister implements ISORequestListener {
 
 
     class Processor implements Runnable {
+        @Autowired
+        private ZipitFeignClient zipitFeignClient;
         private ISOSource isoSource;
         private ISOMsg isoMsg;
 
