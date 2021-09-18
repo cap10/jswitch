@@ -53,10 +53,7 @@ public class ZipitRequestLister implements ISORequestListener {
 
             switch (isoMsg.getMTI()) {
                 case "0200": {
-                    /*isoMsg.setResponseMTI();
-                    isoMsg.set(39, "00");
-                    isoSource.send(isoMsg);*/
-
+                   log.info("############## Attempting to call Feign####################");
                     TransactionResponse transactionResponse;
                     try {
                         transactionResponse = performZipitReceive(
@@ -70,6 +67,7 @@ public class ZipitRequestLister implements ISORequestListener {
                         if (transactionResponse.getStatus().name().equalsIgnoreCase("COMPLETE")) {
                             isoMsg = createZipitSuccessfulResponse();
                         } else {
+                            log.info("######################### Exception occurred: {}", transactionResponse.toString());
                             throw new Exception(transactionResponse.getStatus().name());
                         }
                     } catch (Exception exception) {
@@ -122,12 +120,15 @@ public class ZipitRequestLister implements ISORequestListener {
                 ResponseEntity<TransactionResponse> transactionResponse = zipitFeignClient.zipitReceive(subscriberZipitReceiveDto);
                 return transactionResponse.getBody();
             } catch (Exception exception) {
+                log.info("######################### Exception occurrec: {}", exception.getMessage() + exception.getStackTrace());
                 throw new RuntimeException("Transaction failed");
             }
         }
 
         private BigDecimal getAmountInDollars(String amount) {
+            log.info("##################### formating amount########################3");
             BigDecimal formattedAmount = new BigDecimal(amount);
+            log.info("##################### Formatted amount########################3");
             return formattedAmount.divide(new BigDecimal(100));
         }
 
