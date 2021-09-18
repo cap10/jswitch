@@ -11,6 +11,6 @@ import zw.co.jugaad.jswitch.feigndto.TransactionResponse;
 @FeignClient(name = "akupay-api-gateway",url = "https://api-metbank.jugaad.co.zw")
 public interface ZipitFeignClient {
 
-    @PostMapping("/zipit-receive")
+    @PostMapping("akupay-transaction-service/api/v1/transactions/zipit-receive")
     ResponseEntity<TransactionResponse> zipitReceive(@RequestBody SubscriberZipitReceiveDto subscriberZipitReceiveDto) throws Exception;
 }
