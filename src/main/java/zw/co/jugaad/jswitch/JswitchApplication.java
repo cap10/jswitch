@@ -116,7 +116,6 @@ public class JswitchApplication implements CommandLineRunner {
         @Override
         public void apply(RequestTemplate template) {
             template.header("x-api-key", "$apr1$0xpiuy83$80wyJVeTrN/UhcZuPA7pX.");
-
         }
 
     }
