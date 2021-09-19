@@ -24,25 +24,28 @@ import java.math.BigDecimal;
 public class ZipitRequestLister implements ISORequestListener {
     private ObjectMapper objectMapper = new ObjectMapper();
 
+    @Autowired
+    private ZipitFeignClient zipitFeignClient;
 
 
 
     @SneakyThrows
     @Override
     public boolean process(ISOSource isoSource, ISOMsg isoMsg) {
-        Thread t = new Thread(new Processor(isoSource, isoMsg));
+        Thread t = new Thread(new Processor(zipitFeignClient, isoSource, isoMsg));
         t.start();
         return true;
     }
 
 
     class Processor implements Runnable {
-        @Autowired
+
         private ZipitFeignClient zipitFeignClient;
         private ISOSource isoSource;
         private ISOMsg isoMsg;
 
-        Processor(ISOSource isoSource, ISOMsg isoMsg) {
+        Processor(ZipitFeignClient zipitFeignClient, ISOSource isoSource, ISOMsg isoMsg) {
+            this.zipitFeignClient = zipitFeignClient;
             this.isoSource = isoSource;
             this.isoMsg = isoMsg;
         }
