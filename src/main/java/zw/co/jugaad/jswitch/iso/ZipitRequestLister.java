@@ -71,7 +71,7 @@ public class ZipitRequestLister implements ISORequestListener {
                                 isoMsg.getString(103),//cashmet mobile
                                 isoMsg.getString(4),//amount
                                 isoMsg.getString(103),//account
-                                isoMsg.getString(100),//bin
+                                isoMsg.getString(32),//bin
                                 isoMsg.getString(37)//rrn
                         );
                         log.info("################### Response: {}", transactionResponse.toString());
