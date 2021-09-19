@@ -12,13 +12,17 @@ import org.jpos.iso.packager.GenericPackager;
 import org.jpos.util.Logger;
 import org.jpos.util.SimpleLogListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 import zw.co.jugaad.jswitch.feignclient.ZipitFeignClient;
 import zw.co.jugaad.jswitch.feigndto.ResponseMessage;
 import zw.co.jugaad.jswitch.feigndto.SubscriberZipitReceiveDto;
 import zw.co.jugaad.jswitch.feigndto.TransactionResponse;
 
 import java.math.BigDecimal;
+import java.net.URI;
 
 @Slf4j
 public class ZipitRequestLister implements ISORequestListener {
@@ -26,7 +30,6 @@ public class ZipitRequestLister implements ISORequestListener {
 
     @Autowired
     private ZipitFeignClient zipitFeignClient;
-
 
 
     @SneakyThrows
@@ -61,10 +64,10 @@ public class ZipitRequestLister implements ISORequestListener {
 
             switch (isoMsg.getMTI()) {
                 case "0200": {
-                   log.info("############## Attempting to call Feign####################");
+                    log.info("############## Attempting to call Feign####################");
                     TransactionResponse transactionResponse;
                     try {
-                        transactionResponse = performZipitReceive(
+                        transactionResponse = restTemplateZipitReceive(
                                 isoMsg.getString(103),//cashmet mobile
                                 isoMsg.getString(4),//amount
                                 isoMsg.getString(103),//account
@@ -129,7 +132,7 @@ public class ZipitRequestLister implements ISORequestListener {
                 return transactionResponse.getBody();
             } catch (Exception exception) {
                 if (exception instanceof FeignException) {
-                    FeignException feignException = (FeignException)exception;
+                    FeignException feignException = (FeignException) exception;
                     var message = objectMapper.readValue(feignException.contentUTF8(), ResponseMessage.class);
                     log.info("######################{}", feignException.contentUTF8());
                     log.info("######################### Exception occurred: {}", message.getMessage());
@@ -144,6 +147,30 @@ public class ZipitRequestLister implements ISORequestListener {
             BigDecimal formattedAmount = new BigDecimal(amount);
             log.info("##################### Formatted amount########################3");
             return formattedAmount.divide(new BigDecimal(100));
+        }
+
+
+        private TransactionResponse restTemplateZipitReceive(String mobile, String amount, String sourceAccount, String bin, String rrn) throws Exception {
+            SubscriberZipitReceiveDto subscriberZipitReceiveDto = SubscriberZipitReceiveDto.builder()
+                    .subscriberMobile(mobile)
+                    .amount(getAmountInDollars(amount))
+                    .bankAccount(sourceAccount)
+                    .bin(bin)
+                    .rrn(rrn)
+                    .build();
+            RestTemplate restTemplate = new RestTemplate();
+            final String baseUrl = "https://api-metbank.jugaad.co.zw/akupay-transaction-service/api/v1/transactions/zipit-receive";
+            URI uri = new URI(baseUrl);
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("x-api-key", "$apr1$0xpiuy83$80wyJVeTrN/UhcZuPA7pX.");
+            HttpEntity<SubscriberZipitReceiveDto> request = new HttpEntity<>(subscriberZipitReceiveDto, headers);
+            try {
+                ResponseEntity<TransactionResponse> result = restTemplate.postForEntity(uri, request, TransactionResponse.class);
+                return result.getBody();
+            } catch (Exception exception) {
+                log.info("######################### Exception occurred: {}", exception.getMessage());
+                throw new Exception(exception.getMessage());
+            }
         }
 
     }
