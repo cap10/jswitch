@@ -16,6 +16,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+import zw.co.jugaad.jswitch.enums.ResponseCode;
 import zw.co.jugaad.jswitch.feignclient.ZipitFeignClient;
 import zw.co.jugaad.jswitch.feigndto.ResponseMessage;
 import zw.co.jugaad.jswitch.feigndto.SubscriberZipitReceiveDto;
@@ -82,7 +83,12 @@ public class ZipitRequestLister implements ISORequestListener {
                             throw new Exception(transactionResponse.getStatus().name());
                         }
                     } catch (Exception exception) {
-                        isoMsg = createZipitFailureResponse();
+
+                        if (exception.getMessage().equalsIgnoreCase("Bank not found")) {
+                            isoMsg = createZipitFailureResponse(96);
+                        } else {
+                            isoMsg = createZipitFailureResponse(42);
+                        }
                     }
                     isoSource.send(isoMsg);
 
@@ -112,9 +118,9 @@ public class ZipitRequestLister implements ISORequestListener {
             return isoMsg;
         }
 
-        private ISOMsg createZipitFailureResponse() throws ISOException {
+        private ISOMsg createZipitFailureResponse(int errorCode) throws ISOException {
             isoMsg.setResponseMTI();
-            isoMsg.set(39, "42");
+            isoMsg.set(39, String.valueOf(errorCode));
             return isoMsg;
 
         }

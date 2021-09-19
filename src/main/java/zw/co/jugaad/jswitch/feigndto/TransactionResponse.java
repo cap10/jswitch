@@ -1,10 +1,12 @@
 package zw.co.jugaad.jswitch.feigndto;
 
 
-import lombok.Data;
+import lombok.*;
 
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class TransactionResponse {
     private Long transactionId;
     private String originalRef;
