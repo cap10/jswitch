@@ -114,15 +114,19 @@ public class ZipitRequestLister implements ISORequestListener {
             isoMsg.setResponseMTI();
             isoMsg.set(39, "00");
             isoMsg.set(28, "C00000000");
+            isoMsg.unset("127.22");
+            isoMsg.unset("127.3");
+            isoMsg.unset("127.20");
 
-            String field122 = getLengthOfReference("FIRSTNAME", "VENON").concat(
-                    getLengthOfReference("SURNAME",
+
+            String field122 = getLengthOfReference("SrcCustFName", "VENON").concat(
+                    getLengthOfReference("SrcCustLName",
                             "MAPFUNDE").concat(
-                            getLengthOfReference("RECIPIENT_MOBILE", "263775091262").concat(
-                                    getLengthOfReference("NATIONALID", "592001300Y75")
+                            getLengthOfReference("SrcMobileNo", "263775091262").concat(
+                                    getLengthOfReference("SrcCustIdNo", "592001300Y75")
                             ))
             );
-            //isoMsg.set("127.22", field122);
+            isoMsg.set("127.22", field122);
             return isoMsg;
         }
 
