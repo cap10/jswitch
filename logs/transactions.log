@@ -1,0 +1,27 @@
+12:18:22.476 [main] WARN  o.s.b.t.j.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer - 
+
+Found multiple occurrences of org.json.JSONObject on the class path:
+
+	jar:file:/home/cap10mycap10/.m2/repository/org/json/json/20200518/json-20200518.jar!/org/json/JSONObject.class
+	jar:file:/home/cap10mycap10/.m2/repository/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar!/org/json/JSONObject.class
+
+You may wish to exclude one of them to ensure predictable runtime behavior
+ 
+12:18:22.525 [main] INFO  z.c.j.j.JswitchApplicationTests - Starting JswitchApplicationTests using Java 11.0.11 on jugaad with PID 56400 (started by cap10mycap10 in /home/cap10mycap10/Project/jswitch) 
+12:18:22.526 [main] INFO  z.c.j.j.JswitchApplicationTests - The following profiles are active: local 
+12:18:23.313 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in LAZY mode. 
+12:18:23.367 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 45 ms. Found 1 JPA repository interfaces. 
+12:18:23.608 [main] INFO  o.s.c.context.scope.GenericScope - BeanFactory id=0efd1bea-e7d7-3df9-8e23-e80a8a40bd1b 
+12:18:24.084 [task-1] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default] 
+12:18:24.163 [task-1] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.4.32.Final 
+12:18:24.511 [task-1] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final} 
+12:18:24.659 [task-1] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting... 
+12:18:24.719 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning 
+12:18:24.748 [task-1] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed. 
+12:18:24.785 [task-1] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MariaDB103Dialect 
+12:18:25.740 [task-1] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform] 
+12:18:25.757 [task-1] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default' 
+12:18:25.828 [main] INFO  z.c.j.j.JswitchApplicationTests - Started JswitchApplicationTests in 4.083 seconds (JVM running for 5.171) 
+12:18:25.983 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default' 
+12:18:26.010 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated... 
+12:18:26.021 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed. 

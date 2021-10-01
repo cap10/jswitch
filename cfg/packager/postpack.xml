@@ -646,7 +646,7 @@
       name="RESERVED PRIVATE USE"
       class="org.jpos.iso.IFA_LLLCHAR"/>
 
-  <isofieldpackager
+ <!-- <isofieldpackager
       id="127"  
       length="999999"
       name="RESERVED PRIVATE USE"
@@ -787,7 +787,7 @@
           length="20"
           name="ORIGINAL NODE"
           class="org.jpos.iso.IFA_LLCHAR"/>
-  </isofieldpackager>
+  </isofieldpackager>-->
 
   <isofield
       id="128"

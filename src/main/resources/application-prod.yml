@@ -1,0 +1,137 @@
+spring:
+  zipkin:
+    base-url: http://192.168.1.200:9411/
+    sleuth:
+      sampler:
+        probability: 1
+  main:
+    allow-bean-definition-overriding: true
+  servlet:
+    multipart:
+      enabled: false
+      max-file-size: 10MB
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:mariadb://192.168.1.198:3306/akuwallet?createDatabaseIfNotExist=true&useSSL=false&autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&failOverReadOnly=false&allowMultiQueries=true&serverTimezone=Africa/Harare
+    username: 'root'
+    password: 'skdcnwauicn2ucnaecasdsajdnizucawencascdca'
+    driver-class-name: org.mariadb.jdbc.Driver
+    hikari:
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+        useLocalSessionState: true
+        rewriteBatchedStatements: true
+        cacheResultSetMetadata: true
+        cacheServerConfiguration: true
+        elideSetAutoCommits: true
+        maintainTimeStats: false
+      maximum-pool-size: 10
+
+  jpa:
+    database-platform: org.hibernate.dialect.MariaDB103Dialect
+    database: MYSQL
+    hibernate:
+      ddl-auto: none
+
+    properties:
+      hibernate.format_sql: true
+      hibernate.use_sql_comments: false
+      hibernate.id.new_generator_mappings: true
+      hibernate.connection.provider_disables_autocommit: true
+      hibernate.cache.use_second_level_cache: false
+      hibernate.cache.use_query_cache: false
+      hibernate.generate_statistics: true
+      hibernate.jdbc.batch_size: 500
+      hibernate.order_inserts: true
+      hibernate.order_updates: true
+      hibernate.query.fail_on_pagination_over_collection_fetch: true
+      hibernate.query.in_clause_parameter_padding: true
+  data:
+    jpa:
+      repositories:
+        bootstrap-mode: lazy
+
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+server:
+  port: 9301
+#  servlet:
+#    context-path: /api/v1/user-manager
+
+security:
+  oauth2:
+    resource:
+      jwt:
+        key-value: JWTKey@123
+        key-uri: http://localhost:8762/api/v1/oauth-server/oauth/token_key
+      id: 'carInventory'
+    client:
+      client-id: ADMIN
+      client-secret: appclient@123
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 160000000
+        readTimeout: 160000000
+
+purge.cron.expression: 0 0 5 * * ?
+
+
+#logging.level.org.hibernate.SQL: DEBUG
+#logging.level.org.hibernate.type.descriptor.sql: TRACE
+
+logging.logstash:
+  enabled: true
+  url: 62.171.154.168:5601
+
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 1
+    leaseExpirationDurationInSeconds: 2
+    prefer-ip-address: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    healthcheck:
+      enabled: true
+    lease:
+      duration: 5
+    serviceUrl:
+      defaultZone: http://192.168.1.185:8761/eureka/
+
+
+agent.url: http://192.168.1.182:8200
+subscriber.url: http://192.168.1.191:8300
+settings.url: http://192.168.1.192:8101
+pin.url: http://192.168.1.182:8200
+
+
+audit-trail:
+  url: http://localhost:8765/audit-trail-service/api/v1
+
+
+#logging.level.org.hibernate.SQL: DEBUG
+#logging.level.org.hibernate.type.descriptor.sql: TRACE
+
+email:
+  host: 172.18.0.130
+  port: 25
+  username: noreply@metbank.co.zw
+  password:
+
+
+web:
+  authentication:
+    apikey: $apr1$0xpiuy83$80wyJVeTrN/UhcZuPA7pX.
+
+zipit-receive:
+  url: https://api-metbank.jugaad.co.zw/akupay-transaction-service/api/v1/transactions/zipit-receive
