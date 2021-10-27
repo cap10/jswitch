@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.client.RestTemplate;
 import zw.co.invenico.springcommonsmodule.exception.BusinessValidationException;
 import zw.co.jugaad.jswitch.feigndto.SubscriberResultDto;
@@ -136,7 +135,7 @@ public class ZipitRequestLister implements ISORequestListener {
                 );
                 isoMsg.set("127.22", field122);
                 return isoMsg;
-            }catch{
+            } catch {
                 createZipitFailureResponse(42);
             }
 
@@ -148,7 +147,6 @@ public class ZipitRequestLister implements ISORequestListener {
             return isoMsg;
 
         }
-
 
 
         private BigDecimal getAmountInDollars(String amount) {
@@ -190,9 +188,9 @@ public class ZipitRequestLister implements ISORequestListener {
             params.put("mobile", mobile);
             RestTemplate restTemplate = new RestTemplate();
             try {
-            SubscriberResultDto resultDto= restTemplate.postForObject(urlSubscriber,  SubscriberResultDto.class, params);
+                SubscriberResultDto resultDto = restTemplate.getForObject(urlSubscriber, SubscriberResultDto.class, params);
                 log.info("####################################### Result {}", resultDto);
-               return resultDto;
+                return resultDto;
             } catch (Exception exception) {
                 log.info("######################### Exception occurred: {}", exception.getMessage());
                 throw new BusinessValidationException(exception.getMessage());
