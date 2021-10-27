@@ -35,7 +35,7 @@ public class JswitchApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        /*String hex = "30323030B23A04D588E0812000000000" + "12000022353130303030303030303030"
+        String hex = "30323030B23A04D588E0812000000000" + "12000022353130303030303030303030"
                 + "30303939393930393136323134333236" + "31313732323930393338333330393037"
                 + "30393136303030303030384330303030" + "30303030433030303030303030303635"
                 + "36313438313036313233343536303030" + "30303030333236313933303035303030"
@@ -61,6 +61,7 @@ public class JswitchApplication implements CommandLineRunner {
                 + "7961686F6F2E636F6D3C2F456D61696C" + "416464726573733E202020203C2F5365"
                 + "6E64657244657461696C733E20202020" + "3C5472616E507572706F7365436F6465"
                 + "3E4F54523C2F5472616E507572706F73" + "65436F64653E3C2F6669656C64313237" + "3E";
+
         ISOMsg m = new ISOMsg();
         try {
             GenericPackager pkg = new GenericPackager("cfg/packager/postpack.xml");
@@ -100,7 +101,7 @@ public class JswitchApplication implements CommandLineRunner {
             m.dump(System.out, "x");
             e.printStackTrace();
 
-        }*/
+        }
 
     }
 

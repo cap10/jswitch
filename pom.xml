@@ -18,6 +18,12 @@
     </properties>
     <dependencies>
 
+
+        <dependency>
+            <groupId>org.jpos</groupId>
+            <artifactId>jpos</artifactId>
+            <version>2.1.6</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -81,11 +87,7 @@
             <version>2.11.3</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>org.jpos</groupId>
-            <artifactId>jpos</artifactId>
-            <version>2.1.6</version>
-        </dependency>
+
 
         <dependency>
             <groupId>org.springframework.cloud</groupId>

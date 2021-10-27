@@ -14,12 +14,18 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.client.RestTemplate;
+import zw.co.invenico.springcommonsmodule.exception.BusinessValidationException;
+import zw.co.jugaad.jswitch.feigndto.SubscriberResultDto;
 import zw.co.jugaad.jswitch.feigndto.SubscriberZipitReceiveDto;
 import zw.co.jugaad.jswitch.feigndto.TransactionResponse;
 
 import java.math.BigDecimal;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 @Slf4j
@@ -63,7 +69,7 @@ public class ZipitRequestLister implements ISORequestListener {
                     log.info("############## Attempting to call Feign####################");
                     TransactionResponse transactionResponse;
                     try {
-                        /*transactionResponse = restTemplateZipitReceive(
+                        transactionResponse = restTemplateZipitReceive(
                                 isoMsg.getString(103),//cashmet mobile
                                 isoMsg.getString(4),//amount
                                 isoMsg.getString(103),//account
@@ -77,8 +83,8 @@ public class ZipitRequestLister implements ISORequestListener {
                         } else {
                             log.info("######################### Exception occurred: {}", transactionResponse.toString());
                             throw new Exception(transactionResponse.getStatus().name());
-                        }*/
-                        isoMsg = createZipitSuccessfulResponse();
+                        }
+                        //isoMsg = createZipitSuccessfulResponse();
                     } catch (Exception exception) {
                         if (exception instanceof TimeoutException) {
                             isoMsg = createZipitFailureResponse(42);
@@ -110,7 +116,7 @@ public class ZipitRequestLister implements ISORequestListener {
             }
         }
 
-        private ISOMsg createZipitSuccessfulResponse() throws ISOException {
+        private ISOMsg createZipitSuccessfulResponse() throws ISOException, URISyntaxException {
             isoMsg.setResponseMTI();
             isoMsg.set(39, "00");
             isoMsg.set(28, "C00000000");
@@ -118,16 +124,22 @@ public class ZipitRequestLister implements ISORequestListener {
             isoMsg.unset("127.3");
             isoMsg.unset("127.20");
 
+            //GetSubscriberInformation here
+            try {
+                SubscriberResultDto subscriberResultDto = getSubscriber(isoMsg.getString("103"));
+                String field122 = getLengthOfReference("SrcCustFName", subscriberResultDto.getFirstname()).concat(
+                        getLengthOfReference("SrcCustLName",
+                                subscriberResultDto.getLastname()).concat(
+                                getLengthOfReference("SrcMobileNo", subscriberResultDto.getMobile()).concat(
+                                        getLengthOfReference("SrcCustIdNo", subscriberResultDto.getIdNumber())
+                                ))
+                );
+                isoMsg.set("127.22", field122);
+                return isoMsg;
+            }catch{
+                createZipitFailureResponse(42);
+            }
 
-            String field122 = getLengthOfReference("SrcCustFName", "VENON").concat(
-                    getLengthOfReference("SrcCustLName",
-                            "MAPFUNDE").concat(
-                            getLengthOfReference("SrcMobileNo", "263775091262").concat(
-                                    getLengthOfReference("SrcCustIdNo", "592001300Y75")
-                            ))
-            );
-            isoMsg.set("127.22", field122);
-            return isoMsg;
         }
 
         private ISOMsg createZipitFailureResponse(int errorCode) throws ISOException {
@@ -137,28 +149,7 @@ public class ZipitRequestLister implements ISORequestListener {
 
         }
 
-        /*private TransactionResponse performZipitReceive(String mobile, String amount, String sourceAccount, String bin, String rrn) throws Exception {
-            SubscriberZipitReceiveDto subscriberZipitReceiveDto = SubscriberZipitReceiveDto.builder()
-                    .subscriberMobile(mobile)
-                    .amount(getAmountInDollars(amount))
-                    .bankAccount(sourceAccount)
-                    .bin(bin)
-                    .rrn(rrn)
-                    .build();
-            try {
-                ResponseEntity<TransactionResponse> transactionResponse = zipitFeignClient.zipitReceive(subscriberZipitReceiveDto);
-                return transactionResponse.getBody();
-            } catch (Exception exception) {
-                if (exception instanceof FeignException) {
-                    FeignException feignException = (FeignException) exception;
-                    var message = objectMapper.readValue(feignException.contentUTF8(), ResponseMessage.class);
-                    log.info("######################{}", feignException.contentUTF8());
-                    log.info("######################### Exception occurred: {}", message.getMessage());
-                }
-                exception.printStackTrace();
-                throw new RuntimeException("Transaction failed");
-            }
-        }*/
+
 
         private BigDecimal getAmountInDollars(String amount) {
             log.info("##################### formating amount########################3");
@@ -191,6 +182,22 @@ public class ZipitRequestLister implements ISORequestListener {
                 log.info("######################### Exception occurred: {}", exception.getMessage());
                 throw new Exception(exception.getMessage());
             }
+        }
+
+        private SubscriberResultDto getSubscriber(String mobile) throws URISyntaxException {
+            String urlSubscriber = "https://api-metbank.jugaad.co.zw/akupay-subscriber-service/api/v1/get-subscriber-mobile/{mobile}";
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("mobile", mobile);
+            RestTemplate restTemplate = new RestTemplate();
+            try {
+            SubscriberResultDto resultDto= restTemplate.postForObject(urlSubscriber,  SubscriberResultDto.class, params);
+                log.info("####################################### Result {}", resultDto);
+               return resultDto;
+            } catch (Exception exception) {
+                log.info("######################### Exception occurred: {}", exception.getMessage());
+                throw new BusinessValidationException(exception.getMessage());
+            }
+
         }
 
         private String getLengthOfReference(String tag, String value) {
