@@ -54,3 +54,31 @@ You may wish to exclude one of them to ensure predictable runtime behavior
 18:22:34.877 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default' 
 18:22:34.881 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated... 
 18:22:34.886 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed. 
+23:30:47.038 [main] WARN  o.s.b.t.j.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer - 
+
+Found multiple occurrences of org.json.JSONObject on the class path:
+
+	jar:file:/home/cap10mycap10/.m2/repository/org/json/json/20200518/json-20200518.jar!/org/json/JSONObject.class
+	jar:file:/home/cap10mycap10/.m2/repository/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar!/org/json/JSONObject.class
+
+You may wish to exclude one of them to ensure predictable runtime behavior
+ 
+23:30:47.069 [main] INFO  z.c.j.j.JswitchApplicationTests - Starting JswitchApplicationTests using Java 11.0.11 on jugaad with PID 14100 (started by cap10mycap10 in /home/cap10mycap10/Project/jswitch) 
+23:30:47.070 [main] INFO  z.c.j.j.JswitchApplicationTests - The following profiles are active: local 
+23:30:47.938 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in LAZY mode. 
+23:30:47.978 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 33 ms. Found 1 JPA repository interfaces. 
+23:30:48.166 [main] INFO  o.s.c.context.scope.GenericScope - BeanFactory id=0efd1bea-e7d7-3df9-8e23-e80a8a40bd1b 
+23:30:48.706 [task-1] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default] 
+23:30:48.784 [task-1] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.4.32.Final 
+23:30:49.352 [task-1] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final} 
+23:30:49.479 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning 
+23:30:49.498 [task-1] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting... 
+23:30:49.617 [task-1] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed. 
+23:30:49.655 [task-1] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MariaDB103Dialect 
+23:30:50.762 [task-1] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform] 
+23:30:50.771 [task-1] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default' 
+23:30:50.831 [main] INFO  z.c.j.j.JswitchApplicationTests - Started JswitchApplicationTests in 4.462 seconds (JVM running for 5.453) 
+23:30:50.858 [main] INFO  z.c.j.jswitch.JswitchApplication - ################### 218Postilion:MetaData220214AdditionalData111214AdditionalData3434<?xml version="1.0" encoding="UTF-8" standalone="yes"?><field127>    <ExtendedTransactionType>9000</ExtendedTransactionType>    <SenderDetails>        <Bank>FBCBank</Bank>        <NationalId>632151207B28</NationalId>        <MobileNumber>263772962100</MobileNumber>        <Reference>Test</Reference>        <EmailAddress>lovejoymaphosa@yahoo.com</EmailAddress>    </SenderDetails>    <TranPurposeCode>OTR</TranPurposeCode></field127> 
+23:30:51.301 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default' 
+23:30:51.308 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated... 
+23:30:51.327 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed. 

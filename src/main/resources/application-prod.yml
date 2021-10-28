@@ -134,4 +134,4 @@ web:
     apikey: $apr1$0xpiuy83$80wyJVeTrN/UhcZuPA7pX.
 
 zipit-receive:
-  url: https://api-metbank.jugaad.co.zw/akupay-transaction-service/api/v1/transactions/zipit-receive
+  url: http://192.167.1.109:8765/akupay-transaction-service/api/v1/transactions/zipit-receive

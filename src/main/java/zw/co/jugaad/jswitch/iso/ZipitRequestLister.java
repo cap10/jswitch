@@ -135,8 +135,9 @@ public class ZipitRequestLister implements ISORequestListener {
                 );
                 isoMsg.set("127.22", field122);
                 return isoMsg;
-            } catch {
-                createZipitFailureResponse(42);
+            } catch(Exception exception) {
+                log.info("################ Exception occurred: ",exception.getMessage());
+                return createZipitFailureResponse(42);
             }
 
         }
@@ -183,7 +184,7 @@ public class ZipitRequestLister implements ISORequestListener {
         }
 
         private SubscriberResultDto getSubscriber(String mobile) throws URISyntaxException {
-            String urlSubscriber = "https://api-metbank.jugaad.co.zw/akupay-subscriber-service/api/v1/get-subscriber-mobile/{mobile}";
+            String urlSubscriber = "http://192.167.1.109:8765/akupay-subscriber-service/api/v1/get-subscriber-mobile/{mobile}";
             Map<String, String> params = new HashMap<String, String>();
             params.put("mobile", mobile);
             RestTemplate restTemplate = new RestTemplate();
